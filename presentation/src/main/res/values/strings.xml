@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GuestBookTestApp</string>
+    <string name="login">Login</string>
+    <string name="registration">Registration</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="password2">Confirm password</string>
+    <string name="email">E-mail</string>
+    <string name="avatarImage">Avatar image</string>
+    <string name="chooseImage">Select image</string>
+    <string name="go">Go</string>
+    <string name="fill_forms">Fill all forms</string>
+    <string name="edit_password">Confirm your password</string>
+</resources>
