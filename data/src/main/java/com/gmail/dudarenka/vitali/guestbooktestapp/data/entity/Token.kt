@@ -4,4 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Token(@SerializedName("api_token") val api_token: String,
-                 @SerializedName("id") val userId: String) : DataEntity
+                 @SerializedName("id") val userId: String,
+                 @SerializedName("is_admin") val isAdmin: Int) : DataEntity

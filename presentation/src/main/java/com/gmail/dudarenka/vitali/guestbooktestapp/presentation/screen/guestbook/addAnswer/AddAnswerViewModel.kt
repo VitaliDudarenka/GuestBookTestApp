@@ -21,6 +21,7 @@ class AddAnswerViewModel : BaseViewModel<GuestBookRouter>() {
     var commentId: String = ""
     var token: String = ""
     var userId: String = ""
+    var commentedUserId: String = ""
     val isProgressEnabled = ObservableBoolean(false)
     private var mSocket: Socket? = null
     @Inject
@@ -57,7 +58,7 @@ class AddAnswerViewModel : BaseViewModel<GuestBookRouter>() {
         val disposable = addAnswerUseCase.addFeedback(feedback, commentId).subscribeBy(
                 onComplete = {
                     mSocket!!.connect()
-                    mSocket!!.emit("public-push.$userId", message)
+                    mSocket!!.emit("private-user.$commentedUserId", message)
                     router!!.goToFeedbackList()
                     isProgressEnabled.set(false)
                 },

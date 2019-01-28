@@ -26,7 +26,8 @@ class AuthRepositoryImpl(private val sharedPrefs: AppSharedPrefs, private val ap
                 .login(login.transformToData())
                 .doOnNext {
                     sharedPrefs.putToken(it.api_token)
-                    sharedPrefs.putToken(it.userId)
+                    sharedPrefs.putUserId(it.userId)
+                    sharedPrefs.putIsAdmin(it.isAdmin)
                 })
     }
 

@@ -37,6 +37,7 @@ class RegistrationViewModel : BaseViewModel<GuestBookRouter>() {
         val disposable = registrationUseCase.registration(registration).subscribeBy(
                 onComplete = {
                     router!!.showRegComplete()
+                    router!!.goToSartScreen()
                     isProgressEnabled.set(false)
                 },
                 onError = {

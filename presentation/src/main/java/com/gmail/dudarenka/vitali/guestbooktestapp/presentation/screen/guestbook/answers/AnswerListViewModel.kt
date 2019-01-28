@@ -13,7 +13,6 @@ class AnswerListViewModel : BaseViewModel<GuestBookRouter>() {
     var adapter: AnswerListAdapter? = AnswerListAdapter()
     val isProgressEnabled = ObservableBoolean(false)
     val isAdmin = ObservableBoolean(false)
-    var token: String = ""
     var userId: String = ""
     var id: String = ""
     @Inject
@@ -22,7 +21,9 @@ class AnswerListViewModel : BaseViewModel<GuestBookRouter>() {
     lateinit var isAdminUseCase: IsAdminUseCase
 
 
-    fun setCommentId(commentId: String) {
+    fun setCommentId(commentId: String, userId: String) {
+        this.userId = userId
+        id = commentId
         App.appComponent.inject(this)
         val disposableAdmn = isAdminUseCase.isAdmin().subscribeBy(
                 onSuccess = {
@@ -34,7 +35,6 @@ class AnswerListViewModel : BaseViewModel<GuestBookRouter>() {
                 }
         )
         addToDisposable(disposableAdmn)
-        id = commentId
         App.appComponent.inject(this)
         isProgressEnabled.set(true)
         val disposable = getAnswersUseCase.get(commentId).subscribeBy(
@@ -51,7 +51,7 @@ class AnswerListViewModel : BaseViewModel<GuestBookRouter>() {
     }
 
     fun onClickAdd() {
-        router!!.goToAddAnswer(id)
+        router!!.goToAddAnswer(id, userId)
     }
 
 }

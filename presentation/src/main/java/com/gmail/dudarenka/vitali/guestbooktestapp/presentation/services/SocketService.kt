@@ -1,9 +1,7 @@
 package com.gmail.dudarenka.vitali.guestbooktestapp.presentation.services
 
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
-import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
@@ -34,26 +32,22 @@ class SocketService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         token = intent!!.getStringExtra("token")
         userId = intent.getStringExtra("id")
+        try {
+            mSocket = IO.socket("http://pusher.cpl.by:6020")
+            mSocket.connect()
+            mSocket.on("public-push", onNewComment)
+            mSocket.on("private-user.$userId", onTransport)
+
+
+        } catch (e: URISyntaxException) {
+            throw RuntimeException(e)
+        }
+
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onCreate() {
-
         ctx = applicationContext
-
-        run {
-            try {
-                mSocket = IO.socket("http://pusher.cpl.by:6020")
-                mSocket.connect()
-                mSocket.on("public-push", onNewComment)
-                mSocket.on("private-push.$userId", onTransport)
-
-
-            } catch (e: URISyntaxException) {
-                throw RuntimeException(e)
-            }
-        }
-
     }
 
     private val onTransport = Emitter.Listener { args ->
@@ -65,22 +59,15 @@ class SocketService : Service() {
     }
 
     private fun createNotification(title: String, text: String) {
-
+        val intent = Intent(this, GuestBookActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val mBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.notification_icon_background)
                 .setContentTitle(title)
                 .setContentText(text)
-        val resultIntent = Intent(this, GuestBookActivity::class.java)
-        val stackBuilder = TaskStackBuilder.create(this)
-        stackBuilder.addParentStack(GuestBookActivity::class.java)
-        stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent = stackBuilder.getPendingIntent(
-                0,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        mBuilder.setContentIntent(resultPendingIntent)
+                .setAutoCancel(true)
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(1, mBuilder.build())
+        mNotificationManager.notify(0, mBuilder.build())
 
     }
 
@@ -92,6 +79,7 @@ class SocketService : Service() {
 
 
     override fun onDestroy() {
+        mSocket.disconnect()
         mSocket.off("public-push", onNewComment)
         mSocket.off("private-push.$userId", onTransport)
 

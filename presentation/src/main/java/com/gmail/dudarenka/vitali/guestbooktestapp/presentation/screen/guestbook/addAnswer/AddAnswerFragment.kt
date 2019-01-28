@@ -13,10 +13,12 @@ class AddAnswerFragment : BaseMvvmFragment<AddAnswerViewModel, GuestBookRouter, 
 
     companion object {
         private const val ID_EXTRA = "ID_EXTRA"
-        fun getInstance(id: String): AddAnswerFragment {
+        private const val ID_USER_EXTRA = "ID_USER_EXTRA"
+        fun getInstance(id: String, userId: String): AddAnswerFragment {
             val fragment = AddAnswerFragment()
             val bundle = Bundle()
             bundle.putString(ID_EXTRA, id)
+            bundle.putString(ID_USER_EXTRA, userId)
             fragment.arguments = bundle
             return fragment
         }
@@ -31,8 +33,10 @@ class AddAnswerFragment : BaseMvvmFragment<AddAnswerViewModel, GuestBookRouter, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments?.getString(AddAnswerFragment.ID_EXTRA)
+        val userId = arguments?.getString(AddAnswerFragment.ID_USER_EXTRA)
         if (id != null) {
             viewModel.commentId = id
+            viewModel.commentedUserId = id
         } else {
             router?.goBack()
         }

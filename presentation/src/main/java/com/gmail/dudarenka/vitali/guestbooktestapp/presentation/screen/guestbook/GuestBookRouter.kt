@@ -27,12 +27,12 @@ class GuestBookRouter(activity: GuestBookActivity) : BaseRouter<GuestBookActivit
         replaceFragment(activity.supportFragmentManager, FeedBackListFragment.getInstance(), R.id.container, true)
     }
 
-    fun goToAnswerList(commentId: String) {
-        replaceFragment(activity.supportFragmentManager, AnswerListFragment.getInstance(commentId), R.id.container, true)
+    fun goToAnswerList(commentId: String, userId: String) {
+        replaceFragment(activity.supportFragmentManager, AnswerListFragment.getInstance(commentId, userId), R.id.container, true)
     }
 
-    fun goToAddAnswer(commentId: String) {
-        replaceFragment(activity.supportFragmentManager, AddAnswerFragment.getInstance(commentId), R.id.container, true)
+    fun goToAddAnswer(commentId: String, userId: String) {
+        replaceFragment(activity.supportFragmentManager, AddAnswerFragment.getInstance(commentId, userId), R.id.container, true)
     }
 
     fun goToAddFeedback() {

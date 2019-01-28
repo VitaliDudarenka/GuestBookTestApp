@@ -22,11 +22,13 @@ class FeedBackListViewModel : BaseViewModel<GuestBookRouter>() {
     lateinit var getTokenUseCase: GetTokenUseCase
 
     init {
-        loadItems()
-        loadItems()
+        while (page < 2) {
+            loadItems()
+            page++
+        }
         adapter?.onItemClickListener = object : FeedBackListAdapter.OnItemClickListener {
             override fun onItemClick(feedback: Feedback) {
-                router!!.goToAnswerList(feedback.comment_id!!)
+                router!!.goToAnswerList(feedback.comment_id!!, feedback.user!!.id)
             }
         }
     }

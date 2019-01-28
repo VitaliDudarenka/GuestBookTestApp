@@ -31,11 +31,6 @@ class AppSharedPrefs(val context: Context) {
         sharedPrefs.edit().putString(USER_ID, userId).apply()
     }
 
-    fun isAdmin(isAdmin: Int) {
-        this.isAdmin = isAdmin
-        sharedPrefs.edit().putInt(IS_ADMIN, isAdmin).apply()
-    }
-
     fun getToken(): String {
         return sharedPrefs.getString(KEY_TOKEN, "")
     }
